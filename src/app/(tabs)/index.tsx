@@ -14,6 +14,7 @@ export default function HomeScreen() {
   const [data, setData] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
   
   return (
     <View style={styles.container}>

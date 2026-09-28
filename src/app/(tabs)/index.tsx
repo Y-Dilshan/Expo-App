@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, View, Text, Button, ActivityIndicator, FlatList, RefreshControl } from 'react-native';
 import { router } from 'expo-router';
 import { useState, useEffect } from 'react';
 
@@ -43,17 +43,40 @@ export default function HomeScreen() {
     setRefreshing(true);
     fetchPosts();
   }
+
+  if(loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
+  if(error) {
+    return (
+      <View style={styles.container}>
+        <Text style={{color : 'red', fontSize : 18}}>{error}</Text>
+        <Button title="Retry" onPress={fetchPosts} />
+      </View>
+    );
+  }
       
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome to Home Screen</Text>
-      <Button title="Go to About" onPress={() => router.push({
-        pathname : '/about',
-        params : {username : 'kamal', age : 30}
-      })} />
-        <View style={{marginTop : 10}}></View>
-      <Button title="Go to Contact" onPress={() => router.push('/contact')} />
-    </View>
+    <FlatList
+      data={data}
+      keyExtractor={(item) => item.id.toString()}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      renderItem={({ item }) => (
+        <View style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+          <Text style={styles.title}>{item.title}</Text>
+          <Text>{item.body}</Text>
+        </View>
+      )}
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+    />
   );
 }
 

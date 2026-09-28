@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, Button } from 'react-native';
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type Post = {
   userId: number;
@@ -15,7 +15,35 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  
+
+  const fetchPosts = async () => {
+    try {
+      setError(null);
+      const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const json = await response.json();
+      setData(json);
+    }
+    catch (err:any) {
+      setError(err.message);
+    }
+    finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }
+
+  useEffect (() => {
+    fetchPosts();
+  }, []);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchPosts();
+  }
+      
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to Home Screen</Text>

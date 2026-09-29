@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text, Button, ActivityIndicator, FlatList, RefreshControl } from 'react-native';
 import { router } from 'expo-router';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 type Post = {
   userId: number;

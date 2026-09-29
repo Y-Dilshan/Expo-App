@@ -70,6 +70,8 @@ export default function HomeScreen() {
       }
       renderItem={({ item }) => (
         <View style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+          <Text>{item.id}</Text>
+          <Text>{item.userId}</Text>
           <Text style={styles.title}>{item.title}</Text>
           <Text>{item.body}</Text>
         </View>
